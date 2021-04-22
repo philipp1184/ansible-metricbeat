@@ -1,0 +1,11 @@
+
+
+metricbeat_es_user: "elastic"
+metricbeat_es_pwd: "secret"
+metricbeat_es_url: "http://{{ ansible_default_ipv4.address }}:9200"
+metricbeat_kibana_url: "http://localhost:5601"
+
+
+metricbeat_module_kibana_xpack: "disabled"
+metricbeat_module_logstash_xpack: "disabled"
+metricbeat_module_elasticsearch_xpack: "disabled"

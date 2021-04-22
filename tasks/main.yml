@@ -1,0 +1,65 @@
+
+- name: Install Metricbeat
+  yum: name=metricbeat state=latest
+  tags: metricbeat-install
+  notify:
+    - restart metricbeat
+
+- name: Configure Metricbeat
+  tags: metricbeat-config
+  template: src=metricbeat.yml.j2 dest=/etc/metricbeat/metricbeat.yml
+  notify:
+    - restart metricbeat
+
+- name: Start Metricbeat Service
+  service: name=metricbeat state=started
+  tags:
+    - metricbeat-config
+
+- name: Enable ES-Xpack Module für metricbeat
+  tags: metricbeat-config
+  shell: metricbeat modules enable elasticsearch-xpack
+  when: metricbeat_module_elasticsearch_xpack == "enabled"
+
+- name: Configure XPack Monitoring
+  tags: metricbeat-config
+  template: src=elasticsearch-xpack.yml.j2 dest=/etc/metricbeat/modules.d/elasticsearch-xpack.yml
+  notify:
+    - restart metricbeat
+  when: metricbeat_module_elasticsearch_xpack == "enabled"
+
+
+
+- name: Enable LS-Xpack Module für metricbeat
+  tags: metricbeat-config
+  shell: metricbeat modules enable logstash-xpack
+  when: metricbeat_module_logstash_xpack == "enabled"
+
+- name: Configure LS-XPack Monitoring
+  tags: metricbeat-config
+  template: src=logstash-xpack.yml.j2 dest=/etc/metricbeat/modules.d/logstash-xpack.yml
+  notify:
+    - restart metricbeat
+  when: metricbeat_module_logstash_xpack == "enabled"
+
+
+
+- name: Enable Kibana-Xpack Module für metricbeat
+  tags: metricbeat-config
+  shell: metricbeat modules enable kibana-xpack
+  when: metricbeat_module_kibana_xpack == "enabled"
+
+- name: Configure Kibana-XPack Monitoring
+  tags: metricbeat-config
+  template: src=kibana-xpack.yml.j2 dest=/etc/metricbeat/modules.d/kibana-xpack.yml
+  notify:
+    - restart metricbeat
+  when: metricbeat_module_kibana_xpack == "enabled"
+
+
+
+  when: metricbeat_module_kibana_xpack == "enabled"
+
+- name: Enable ES-Xpack Module für metricbeat
+  tags: metricbeat-config
+  shell: metricbeat modules disable system

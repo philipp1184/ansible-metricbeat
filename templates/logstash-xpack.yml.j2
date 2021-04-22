@@ -1,0 +1,12 @@
+# Module: logstash
+# Docs: https://www.elastic.co/guide/en/beats/metricbeat/7.10/metricbeat-module-logstash.html
+
+- module: logstash
+  metricsets:
+    - node
+    - node_stats
+  xpack.enabled: true
+  period: 10s
+  hosts: ["{{ ansible_default_ipv4.address }}:9600"]
+  #username: "user"
+  #password: "secret"
